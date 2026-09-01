@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangla Handwritten Document to Text Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>
+        Bangla Handwritten Document
+        <span class="hero-line2"><span class="hero-to">to</span> <span class="hero-accent">Text Converter</span></span>
+      </h1>
+      <p class="hero-subtitle">
+        Upload your Bangla handwritten document and get instant digital text conversion
+      </p>
+    </header>
+
+    <div class="workspace">
+      <!-- Left panel: Upload -->
+      <section class="panel" id="uploadPanel">
+        <div class="panel-header">
+          <span class="panel-icon panel-icon-upload" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16"/>
+            </svg>
+          </span>
+          <h2>Upload Document</h2>
+        </div>
+
+        <div class="panel-body">
+          <div id="uploadEmpty" class="upload-empty">
+            <div id="dropArea" class="drop-zone" tabindex="0">
+              <input id="fileInput" type="file" accept="image/png,image/jpeg,image/jpg" hidden />
+              <div class="drop-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <p class="drop-title">Drop your document here</p>
+              <p class="drop-subtitle">or click to browse</p>
+              <button id="browseBtn" class="btn btn-choose" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 16V4m0 0l-4 4m4-4l4 4"/>
+                </svg>
+                Choose Files
+              </button>
+              <p class="drop-hint">Support: Images (JPG, PNG, JPEG)</p>
+              <p class="drop-hint">Select a single image file</p>
+            </div>
+          </div>
+
+          <div id="uploadPreview" class="upload-preview hidden">
+            <div class="preview-frame">
+              <button id="removeBtn" class="remove-btn" type="button" aria-label="Remove file">&times;</button>
+              <img id="previewImage" alt="Uploaded document preview" />
+            </div>
+          </div>
+        </div>
+
+        <div id="uploadFooter" class="panel-footer hidden">
+          <button id="changeFileBtn" class="btn btn-secondary" type="button">Change File</button>
+          <button id="extractBtn" class="btn btn-primary" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <circle cx="11" cy="14" r="3"/>
+              <line x1="14" y1="17" x2="16" y2="19"/>
+            </svg>
+            <span id="extractBtnLabel">Extract Text</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Right panel: Output -->
+      <section class="panel" id="outputPanel">
+        <div class="panel-header">
+          <span class="panel-icon panel-icon-doc" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+          </span>
+          <h2>Extracted Text</h2>
+          <div id="outputActions" class="header-actions hidden">
+            <button id="copyBtn" class="icon-btn" type="button" title="Copy text" aria-label="Copy text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+            </button>
+            <button id="downloadBtn" class="icon-btn" type="button" title="Download text" aria-label="Download text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button id="editBtn" class="icon-btn" type="button" title="Edit text" aria-label="Edit text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div id="outputEmpty" class="output-empty">
+            <p>Upload a document and click 'Extract Text' to see the results here</p>
+          </div>
+
+          <div id="outputProcessing" class="output-processing hidden">
+            <div class="processing-inner">
+              <span class="spinner spinner-lg" aria-hidden="true"></span>
+              <p>Processing...</p>
+            </div>
+          </div>
+
+          <textarea
+            id="outputText"
+            class="output-text hidden"
+            placeholder=""
+            readonly
+            spellcheck="false"
+          ></textarea>
+        </div>
+      </section>
+    </div>
+
+    <p id="statusMessage" class="status-message" aria-live="polite"></p>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
