@@ -1,4 +1,8 @@
 # Sixfinity OCR Website
+![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
+![Deep Learning](https://img.shields.io/badge/Deep%20Learning-OCR%20%7C%20VLMs%20%7C%20LLM-orange)
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 Sixfinity OCR is a user-friendly Bangla document digitization application designed to extract text from handwritten and printed Bangla-English documents. Users can upload document images through the interface, which processes the input using OCR and Vision-Language Model (VLM)-based techniques powered by the Gemini API to generate machine-readable text. The application provides a clear visualization of the extracted output and allows users to edit, copy, and download the digitized text. By combining OCR, AI-based recognition, and an intuitive user interface, Sixfinity OCR offers a practical, accurate, and cost-effective solution for real-world Bangla document digitization.
 
