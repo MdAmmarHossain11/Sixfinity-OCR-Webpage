@@ -36,7 +36,6 @@ OCR_PROMPT = (
 
 _client: genai.Client | None = None
 
-
 def ensure_gemini_configured():
     global _client
     if not GEMINI_API_KEY:
@@ -47,7 +46,6 @@ def ensure_gemini_configured():
         _client = genai.Client(api_key=GEMINI_API_KEY)
     return _client
 
-
 def model_candidates():
     ordered = [GEMINI_MODEL, *FALLBACK_MODELS]
     seen = set()
@@ -55,7 +53,6 @@ def model_candidates():
         if name not in seen:
             seen.add(name)
             yield name
-
 
 def optimize_image(image_bytes: bytes, mime_type: str) -> tuple[bytes, str]:
     image = Image.open(io.BytesIO(image_bytes))
@@ -80,13 +77,11 @@ def is_quota_error(exc: Exception) -> bool:
     text = str(exc).lower()
     return "429" in str(exc) or "quota" in text or "resource exhausted" in text
 
-
 def retry_seconds_from_error(exc: Exception) -> int | None:
     match = re.search(r"retry in (\d+(?:\.\d+)?)s", str(exc), re.IGNORECASE)
     if match:
         return max(1, int(float(match.group(1))))
     return None
-
 
 def friendly_api_error(exc: Exception) -> str:
     if is_quota_error(exc):
@@ -101,7 +96,6 @@ def friendly_api_error(exc: Exception) -> str:
             "https://aistudio.google.com/"
         )
     return f"OCR failed: {str(exc)[:300]}"
-
 
 def run_ocr(image_bytes: bytes, mime_type: str) -> str:
     optimized_bytes, optimized_mime = optimize_image(image_bytes, mime_type)
@@ -132,7 +126,6 @@ def run_ocr(image_bytes: bytes, mime_type: str) -> str:
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/api/extract-text", methods=["POST"])
 def extract_text():
